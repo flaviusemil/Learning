@@ -16,3 +16,7 @@ _start:
     mov ebx, 1      ; write to the STDOUT file
     mov eax, 4      ; invoke SYS_WRITE (kernel opcode 4)
     int 80h         ; call the kernel
+
+    mov ebx, 0      ; return 0 status on exit - 'No Errors'
+    mov eax, 1      ; invoke SYS_EXIT (kernel opcode 1)
+    int 80h         ; call the kernel
