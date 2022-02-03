@@ -5,6 +5,10 @@
  
 %include    'functions.asm'
 
+SECTION .data
+; our response string
+response db 'HTTP/1.1 200 OK', 0Dh, 0Ah, 'Content-Type: text/html', 0Dh, 0Ah, 'Content-Length: 14', 0Dh, 0Ah, 0Dh, 0Ah, 'Hello World!', 0Dh, 0Ah, 0h
+
 SECTION .bss
 buffer  resb    255,            ; variable to store request headers
 
@@ -76,6 +80,13 @@ _read:
  
     mov     eax, buffer         ; move the memory address of our buffer variable into eax for printing
     call    sprintLF            ; call our string printing function
+
+_write:
+    mov     edx, 78             ; move 78 dec into edx (length in bytes to write)
+    mov     ecx, response       ; move address of our response variable into ecx
+    mov     ebx, esi            ; move file descriptor into ebx (accepted socket id)
+    mov     eax, 4              ; invoke SYS_WRITE (kernel opcode 4)
+    int     80h                 ; call the kernel
 
 _exit:
     call    quit                ; call our quit function
